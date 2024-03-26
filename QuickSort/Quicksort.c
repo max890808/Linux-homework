@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "list.h"
 
 typedef struct __node {
@@ -29,14 +30,11 @@ int list_length(struct list_head *head)
     return n;
 }
 
-struct list_head *list_construct(struct list_head *head, int n)
+void list_construct(struct list_head *head, int n)
 {
-    if(!head)
-        return head;
     node_t *node = malloc(sizeof(node_t));
-    list_add(&(node->list), head);
+    list_add(&node->list, head);
     node->value = n;
-    return head;
 }
 
 void list_free(struct list_head *head)
@@ -67,7 +65,7 @@ void quick_sort(struct list_head **list)
     int n = list_length(*list);
     int value;
     int i = 0;
-    int max_level = n;
+    int max_level = n+1;
     struct list_head *begin[max_level];
     struct list_head *result = list_new(), *left = list_new(), *right = list_new();
 
@@ -140,26 +138,30 @@ void shuffle(int *array, size_t n)
 
 int main(int argc, char **argv)
 {
-    struct list_head node, *head = &node;
-    INIT_LIST_HEAD(head);
+    srand( time(NULL) );
+    clock_t START, END;
+    struct list_head *head = list_new();
 
-    size_t count = 10;
+    size_t count = 1000;
 
     int *test_arr = malloc(sizeof(int) * count);
 
     for (int i = 0; i < count; ++i)
         test_arr[i] = i;
-    shuffle(test_arr, count);
+    // shuffle(test_arr, count);
 
     while (count--)
-        head = list_construct(head, test_arr[count]);
-
+        list_construct(head, test_arr[count]);
+    START = clock();
     quick_sort(&head);
+    END = clock();
     assert(list_is_ordered(head));
 
     list_free(head);
 
     free(test_arr);
+    double diff = END - START;
+    printf(" %f  sec\n", diff / CLOCKS_PER_SEC );
 
     return 0;
 }
