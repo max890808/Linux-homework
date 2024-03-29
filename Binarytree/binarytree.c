@@ -1,20 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-
-#define container_of(ptr, type, member) \
-    ((type *) ((char *) (ptr) - (size_t) & (((type *) 0)->member)))
-
-#define list_entry(ptr, type, member) container_of(ptr, type, member)
-
-#define hlist_for_each(pos, head) \
-    for (pos = (head)->first; pos; pos = pos->next)
-
-struct hlist_node {
-    struct hlist_node *next, **pprev;
-};
-struct hlist_head {
-    struct hlist_node *first;
-};
+#include "binarytree.h"
 
 static inline void INIT_HLIST_HEAD(struct hlist_head *h)
 {
@@ -29,17 +13,6 @@ static inline void hlist_add_head(struct hlist_node *n, struct hlist_head *h)
     n->pprev = &h->first;
     h->first = n;
 }
-
-struct TreeNode {
-    int val;
-    struct TreeNode *left, *right;
-};
-
-struct order_node {
-    struct hlist_node node;
-    int val;
-    int idx;
-};
 
 static int find(int num, int size, const struct hlist_head *heads)
 {
@@ -87,7 +60,7 @@ static inline void node_add(int val,
     hlist_add_head(&on->node, &heads[hash]);
 }
 
-static struct TreeNode *buildTree(int *preorder,
+ struct TreeNode *buildTree(int *preorder,
                                   int preorderSize,
                                   int *inorder,
                                   int inorderSize)
