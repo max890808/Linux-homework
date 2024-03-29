@@ -57,10 +57,10 @@ int main(){
     struct TreeNode *check_tree = buildTree(pre, num_of_node, in, num_of_node);
     
     int *check_pre = malloc(num_of_node * sizeof(int));
-    preOrderTraversal(tree, check_pre);
+    preOrderTraversal(check_tree, check_pre);
 
     int *check_in = malloc(num_of_node * sizeof(int));
-    inOrderTraversal(tree, check_in);
+    inOrderTraversal(check_tree, check_in);
 
     for(int i = 0; i < num_of_node; i++){
         assert(*(pre + i) == *(check_pre + i));
